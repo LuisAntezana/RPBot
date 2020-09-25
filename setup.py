@@ -3,10 +3,11 @@
 from distutils.core import setup
 from os.path import abspath, dirname, join
 import re
+from setuptools import setup, find_packages
 
 NAME = 'rpbot'
 CLASSIFIERS = """
-Development Status :: 1 - Beta
+Development Status :: 4 - Beta
 Operating System :: OS Independent
 Programming Language :: Python
 Topic :: Software Development :: Testing
@@ -14,7 +15,7 @@ Topic :: Software Development :: Testing
 CURDIR = dirname(abspath(__file__))
 with open(join(CURDIR, 'rpbot', '__init__.py')) as f:
     VERSION = re.search("\n__version__ = '(.*)'\n", f.read()).group(1)
-with open(join(CURDIR, 'README.rst')) as f:
+with open(join(CURDIR, 'README.md')) as f:
     README = f.read()
 CURDIR = dirname(abspath(__file__))
 with open(join(CURDIR, 'requirements.txt')) as f:
@@ -29,12 +30,12 @@ setup(
     url              = 'https://github.com/doyou89/RPBot',
     download_url     = 'https://pypi.python.org/pypi/rpbot',
     license          = 'Apache License 2.0',
-    description      = 'A tool for inserting Robot Framework test run '
-                       'results into ReportPortal.',
+    description      = 'A tool for inserting Robot Framework test run results into ReportPortal.',
     long_description = README,
+    long_description_content_type = 'text/markdown',
     keywords         = 'robotframework testing testautomation atdd',
     platforms        = 'any',
     classifiers      = CLASSIFIERS,
-    packages         = ['rpbot', 'rpbot.reader', 'rpbot.reportportal'],
+    packages         = find_packages(),
     install_requires = REQUIREMENTS,
 )
