@@ -35,6 +35,6 @@ setup(
     keywords         = 'robotframework testing testautomation atdd',
     platforms        = 'any',
     classifiers      = CLASSIFIERS,
-    packages         = ['rpbot', 'rpbot.reader'],
+    packages         = ['rpbot', 'rpbot.reader', 'rpbot.reportportal'],
     install_requires = REQUIREMENTS,
 )
