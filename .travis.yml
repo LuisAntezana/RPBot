@@ -1,5 +1,6 @@
-language: python
 deploy:
   provider: pypi
   username: "__token__"
   password: "pypi-AgEIcHlwaS5vcmcCJDU5NmM4Njc0LThlODYtNDNmZi1iYmQxLTAzMDUwYzNlYzMzMwACJXsicGVybWlzc2lvbnMiOiAidXNlciIsICJ2ZXJzaW9uIjogMX0AAAYgP9mSp3xKWBUaG7GiJfQbEojiCbneaqBLgFFA57otKCY"
+  distributions: "sdist bdist_wheel"
+  skip_existing: true
