@@ -24,6 +24,16 @@ class ReaderOptions(object):
 
     def _add_parser_options(self):
         options = [
+            ('-d', '--dry-run', {'action': 'store_true',
+                                 'default': False,
+                                 'dest': 'dry_run',
+                                 'help': 'do everything except store results into disk'}),
+
+            ('-v', '--verbose', {
+                                 'default': False,
+                                 'dest': 'be_verbose',
+                                 'help': 'be verbose about the operation'}),
+
             ('', '--RP_UUID', {'dest': 'rp_uuid', 'default': None, 'help': 'your user uuid'}),
             ('', '--RP_ENDPOINT', {'dest': 'rp_endpoint', 'default': None, 'help': 'your reportportal url'}),
             ('', '--RP_LAUNCH', {'dest': 'rp_launch', 'default': None, 'help': 'launch name'}),
@@ -60,12 +70,16 @@ class ReaderOptions(object):
         exit(1)
 
     @property
+    def be_verbose(self):
+        return self._options.be_verbose
+
+    @property
     def file_paths(self):
         return self._files
 
     @property
-    def listener(self):
-        return self._options.listener_module
+    def dry_run(self):
+        return self._options.dry_run
 
     @property
     def rp_uuid(self):

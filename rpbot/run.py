@@ -17,6 +17,7 @@ import sys
 from robot.errors import DataError
 from rpbot.reader import ReaderOptions, RobotResultsParser
 from rpbot.reportportal.variables import Variables
+from rpbot.reportportal.reporter import DryRunRP, ReportPortal
 
 
 class RpBot(object):
@@ -24,7 +25,11 @@ class RpBot(object):
     def __init__(self):
         self._options = ReaderOptions()
         Variables.check_variables(self._options)
-        self._parser = RobotResultsParser()
+        if self._options.dry_run:
+            reporter = DryRunRP(self._options.be_verbose)
+        else:
+            reporter = ReportPortal(self._options.be_verbose)
+        self._parser = RobotResultsParser(reporter, self._options.be_verbose)
 
     def run(self):
         try:

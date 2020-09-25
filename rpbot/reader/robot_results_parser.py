@@ -13,22 +13,27 @@
 #  limitations under the License.
 import logging
 from robot.api import ExecutionResult
-from rpbot.reportportal import listener
+
+
+logging.basicConfig()
 
 
 class RobotResultsParser(object):
 
-    def __init__(self):
+    def __init__(self, reporter, verbose):
         self._logger = logging.getLogger('Parser')
+        if verbose:
+            self._logger.setLevel(verbose)
+        self.reporter = reporter
 
     def xml_to_db(self, xml_file):
-        self._logger.debug('- Parsing %s' % xml_file)
+        self._logger.info('- Parsing %s' % xml_file)
         test_run = ExecutionResult(xml_file, include_keywords=True)
 
         self._parse_suite(test_run.suite)
 
     def _parse_suite(self, suite, parent_suite_id=None):
-        self._logger.debug('`--> Parsing suite: %s' % suite.name)
+        self._logger.info('`--> Parsing suite: %s' % suite.name)
 
         attributes = {
             'id': suite.id,
@@ -47,16 +52,16 @@ class RobotResultsParser(object):
             'message': suite.message,
         }
 
-        listener.start_suite(suite.name, attributes)
+        self.reporter.start_suite(suite.name, attributes)
 
         self._parse_suites(suite, suite.id)
         self._parse_tests(suite.tests, suite.id)
         self._parse_keywords(suite.keywords, suite.id, None)
 
-        listener.end_suite(suite.name, attributes)
+        self.reporter.end_suite(suite.name, attributes)
         if suite.id == 's1' and not suite.suites:
             attributes['id'] = suite.id
-            listener.end_suite(suite.name, attributes)
+            self.reporter.end_suite(suite.name, attributes)
 
     def _parse_suites(self, suite, parent_suite_id):
         [self._parse_suite(subsuite, parent_suite_id) for subsuite in suite.suites]
@@ -65,7 +70,7 @@ class RobotResultsParser(object):
         [self._parse_test(test, suite_id) for test in tests]
 
     def _parse_test(self, test, suite_id):
-        self._logger.debug('  `--> Parsing test: %s' % test.name)
+        self._logger.info('  `--> Parsing test: %s' % test.name)
 
         attributes = {
             'id': test.id,
@@ -81,11 +86,11 @@ class RobotResultsParser(object):
             'message': test.message
         }
 
-        listener.start_test(test.name, attributes)
+        self.reporter.start_test(test.name, attributes)
 
         self._parse_keywords(test.keywords, None, test.id)
 
-        listener.end_test(test.name, attributes)
+        self.reporter.end_test(test.name, attributes)
 
     def _parse_keywords(self, keywords, suite_id, test_id, keyword_id=None):
         [self._parse_keyword(keyword, suite_id, test_id, keyword_id) for keyword in keywords]
@@ -106,14 +111,14 @@ class RobotResultsParser(object):
             'status': keyword.status
         }
 
-        listener.start_keyword(keyword.name, attributes)
+        self.reporter.start_keyword(keyword.name, attributes)
 
         self._parse_messages(keyword.messages, keyword_id)
         self._parse_keywords(keyword.keywords, None, None, keyword_id)
 
-        listener.end_keyword(keyword.name, attributes)
+        self.reporter.end_keyword(keyword.name, attributes)
 
     def _parse_messages(self, messages, keyword_id):
         for message in messages:
-            listener.log_message({'message': message.message, 'level': message.level,
-                                  'timestamp': message.timestamp, 'html': message.html})
+            self.reporter.log_message({'message': message.message, 'level': message.level,
+                                       'timestamp': message.timestamp, 'html': message.html})
