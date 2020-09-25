@@ -24,10 +24,10 @@ with open(join(CURDIR, 'requirements.txt')) as f:
 setup(
     name             = NAME,
     version          = VERSION,
-    author           = 'Robot Framework Developers, Pawel Bylicki',
-    author_email     = 'robotframework@gmail.com',
-    url              = 'https://github.com/pbylicki/DbBot-SQLAlchemy',
-    download_url     = 'https://pypi.python.org/pypi/dbbot-sqlalchemy',
+    author           = 'Doyou Jung',
+    author_email     = 'doyou89@gmail.com',
+    url              = 'https://github.com/doyou89/RPBot',
+    download_url     = 'https://pypi.python.org/pypi/rpbot',
     license          = 'Apache License 2.0',
     description      = 'A tool for inserting Robot Framework test run '
                        'results into ReportPortal.',
