@@ -4,19 +4,22 @@ from distutils.core import setup
 from os.path import abspath, dirname, join
 import re
 
-NAME = 'dbbot-sqlalchemy'
+NAME = 'rpbot'
 CLASSIFIERS = """
-Development Status :: 4 - Beta 
-License :: OSI Approved :: Apache Software License
+Development Status :: 1 - Beta
 Operating System :: OS Independent
 Programming Language :: Python
 Topic :: Software Development :: Testing
 """.strip().splitlines()
 CURDIR = dirname(abspath(__file__))
-with open(join(CURDIR, 'dbbot', '__init__.py')) as f:
+with open(join(CURDIR, 'rpbot', '__init__.py')) as f:
     VERSION = re.search("\n__version__ = '(.*)'\n", f.read()).group(1)
 with open(join(CURDIR, 'README.rst')) as f:
     README = f.read()
+CURDIR = dirname(abspath(__file__))
+with open(join(CURDIR, 'requirements.txt')) as f:
+    REQUIREMENTS = f.read().splitlines()
+    REQUIREMENTS = [r.split('#egg=')[-1] for r in REQUIREMENTS]
 
 setup(
     name             = NAME,
@@ -27,11 +30,11 @@ setup(
     download_url     = 'https://pypi.python.org/pypi/dbbot-sqlalchemy',
     license          = 'Apache License 2.0',
     description      = 'A tool for inserting Robot Framework test run '
-                       'results into SQL database using SQLAlchemy.',
+                       'results into ReportPortal.',
     long_description = README,
     keywords         = 'robotframework testing testautomation atdd',
     platforms        = 'any',
     classifiers      = CLASSIFIERS,
-    packages         = ['dbbot', 'dbbot.reader'],
-    install_requires = ['robotframework', 'sqlalchemy']
+    packages         = ['rpbot', 'rpbot.reader'],
+    install_requires = REQUIREMENTS,
 )
