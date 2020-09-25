@@ -1,8 +1,4 @@
-language: python
-python:
-  - "3.6"
-cache: pip
-install:
-  - pip install -r requirements.txt
-script:
-  - python setup.py sdist upload
+deploy:
+  provider: pypi
+  username: "__token__"
+  password: "pypi-AgEIcHlwaS5vcmcCJDU5NmM4Njc0LThlODYtNDNmZi1iYmQxLTAzMDUwYzNlYzMzMwACJXsicGVybWlzc2lvbnMiOiAidXNlciIsICJ2ZXJzaW9uIjogMX0AAAYgP9mSp3xKWBUaG7GiJfQbEojiCbneaqBLgFFA57otKCY"
