@@ -93,21 +93,21 @@ def test_xml_to_db(reporter, parser):
     parser.xml_to_db(io.StringIO(simple_output_xml))
 
     assert reporter.start_suite.call_count == 1
-    assert reporter.start_suite.call_args.args[0] == 'Test Rp'
-    assert reporter.start_suite.call_args.args[1]['id'] == 's1'
-    assert reporter.start_suite.call_args.args[1]['status'] == 'PASS'
+    assert reporter.start_suite.call_args[0][0] == 'Test Rp'
+    assert reporter.start_suite.call_args[0][1]['id'] == 's1'
+    assert reporter.start_suite.call_args[0][1]['status'] == 'PASS'
 
     assert reporter.start_test.call_count == 1
-    assert reporter.start_test.call_args.args[0] == 'test1'
-    assert reporter.start_test.call_args.args[1]['id'] == 's1-t1'
-    assert reporter.start_test.call_args.args[1]['status'] == 'PASS'
+    assert reporter.start_test.call_args[0][0] == 'test1'
+    assert reporter.start_test.call_args[0][1]['id'] == 's1-t1'
+    assert reporter.start_test.call_args[0][1]['status'] == 'PASS'
 
     assert reporter.start_keyword.call_count == 1
-    assert reporter.start_keyword.call_args.args[0] == 'BuiltIn.Log'
-    assert reporter.start_keyword.call_args.args[1]['type'] == 'kw'
-    assert reporter.start_keyword.call_args.args[1]['kwname'] == 'Log'
-    assert reporter.start_keyword.call_args.args[1]['libname'] == 'BuiltIn'
-    assert reporter.start_keyword.call_args.args[1]['status'] == 'PASS'
+    assert reporter.start_keyword.call_args[0][0] == 'BuiltIn.Log'
+    assert reporter.start_keyword.call_args[0][1]['type'] == 'kw'
+    assert reporter.start_keyword.call_args[0][1]['kwname'] == 'Log'
+    assert reporter.start_keyword.call_args[0][1]['libname'] == 'BuiltIn'
+    assert reporter.start_keyword.call_args[0][1]['status'] == 'PASS'
 
     assert reporter.end_keyword.call_count == 1
     assert reporter.end_test.call_count == 1
@@ -119,21 +119,21 @@ def test_xml_to_db_with_fail(reporter, parser):
     parser.xml_to_db(io.StringIO(simple_failed_output_xml))
 
     assert reporter.start_suite.call_count == 1
-    assert reporter.start_suite.call_args.args[0] == 'Test Rp'
-    assert reporter.start_suite.call_args.args[1]['id'] == 's1'
-    assert reporter.start_suite.call_args.args[1]['status'] == 'FAIL'
+    assert reporter.start_suite.call_args[0][0] == 'Test Rp'
+    assert reporter.start_suite.call_args[0][1]['id'] == 's1'
+    assert reporter.start_suite.call_args[0][1]['status'] == 'FAIL'
 
     assert reporter.start_test.call_count == 1
-    assert reporter.start_test.call_args.args[0] == 'test1'
-    assert reporter.start_test.call_args.args[1]['id'] == 's1-t1'
-    assert reporter.start_test.call_args.args[1]['status'] == 'FAIL'
+    assert reporter.start_test.call_args[0][0] == 'test1'
+    assert reporter.start_test.call_args[0][1]['id'] == 's1-t1'
+    assert reporter.start_test.call_args[0][1]['status'] == 'FAIL'
 
     assert reporter.start_keyword.call_count == 2
-    assert reporter.start_keyword.call_args_list[0].args[0] == 'BuiltIn.Log'
-    assert reporter.start_keyword.call_args_list[0].args[1]['type'] == 'kw'
-    assert reporter.start_keyword.call_args_list[0].args[1]['kwname'] == 'Log'
-    assert reporter.start_keyword.call_args_list[0].args[1]['libname'] == 'BuiltIn'
-    assert reporter.start_keyword.call_args_list[0].args[1]['status'] == 'PASS'
+    assert reporter.start_keyword.call_args_list[0][0][0] == 'BuiltIn.Log'
+    assert reporter.start_keyword.call_args_list[0][0][1]['type'] == 'kw'
+    assert reporter.start_keyword.call_args_list[0][0][1]['kwname'] == 'Log'
+    assert reporter.start_keyword.call_args_list[0][0][1]['libname'] == 'BuiltIn'
+    assert reporter.start_keyword.call_args_list[0][0][1]['status'] == 'PASS'
 
     assert reporter.end_keyword.call_count == 2
     assert reporter.end_test.call_count == 1
