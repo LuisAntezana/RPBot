@@ -26,6 +26,12 @@ class ReportPortal:
         if verbose:
             self._logger.setLevel(verbose)
 
+    def _gen_attributes_from_robot_tags(self, tags):
+        attrs = []
+        for tag in tags:
+            attrs.append({'value': tag})
+        return attrs
+
     def start_launch(self, launch):
         """Start a new launch at the Report Portal."""
         if not Variables.launch_id:
@@ -75,7 +81,7 @@ class ReportPortal:
             RobotService.start_test(
                 test=test,
                 parent_item_id=parent_item_id,
-                attributes=gen_attributes(Variables.test_attributes + test.tags),
+                attributes=gen_attributes(Variables.test_attributes) + self._gen_attributes_from_robot_tags(test.tags),
             ),
             parent_item_id))
 
