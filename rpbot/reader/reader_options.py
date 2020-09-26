@@ -11,7 +11,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from optparse import OptionParser
+from optparse import OptionParser, OptionGroup
 from os.path import exists
 
 
@@ -27,13 +27,17 @@ class ReaderOptions(object):
             ('-d', '--dry-run', {'action': 'store_true',
                                  'default': False,
                                  'dest': 'dry_run',
-                                 'help': 'do everything except store results into disk'}),
+                                 'help': 'do everything except store results into reportportal'}),
 
             ('-v', '--verbose', {
                                  'default': False,
-                                 'dest': 'be_verbose',
-                                 'help': 'be verbose about the operation'}),
+                                 'dest': 'level',
+                                 'help': 'be verbose. WARN, INFO, and DEBUG available.'}),
+        ]
+        for option in options:
+            self._parser.add_option(option[0], option[1], **option[2])
 
+        rp_group_options = [
             ('', '--RP_UUID', {'dest': 'rp_uuid', 'default': None, 'help': 'your user uuid'}),
             ('', '--RP_ENDPOINT', {'dest': 'rp_endpoint', 'default': None, 'help': 'your reportportal url'}),
             ('', '--RP_LAUNCH', {'dest': 'rp_launch', 'default': None, 'help': 'launch name'}),
@@ -49,13 +53,14 @@ class ReaderOptions(object):
             ('', '--RP_LOG_BATCH_SIZE', {'dest': 'rp_log_batch_size', 'default': '20',
                                          'help': 'Default value is "20", affects size of async batch log requests'}),
         ]
-        for option in options:
-            self._parser.add_option(option[0], option[1], **option[2])
+        rp_group = OptionGroup(self._parser, 'ReportPortal Options')
+        for option in rp_group_options:
+            rp_group.add_option(option[0], option[1], **option[2])
+        self._parser.add_option_group(rp_group)
 
     def _get_validated_options(self):
         options, files = self._parser.parse_args()
         self._check_files(files)
-
         return options, files
 
     def _check_files(self, files):
@@ -70,8 +75,8 @@ class ReaderOptions(object):
         exit(1)
 
     @property
-    def be_verbose(self):
-        return self._options.be_verbose
+    def verbose_level(self):
+        return self._options.level
 
     @property
     def file_paths(self):

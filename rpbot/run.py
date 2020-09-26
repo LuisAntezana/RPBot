@@ -26,10 +26,10 @@ class RpBot(object):
         self._options = ReaderOptions()
         Variables.check_variables(self._options)
         if self._options.dry_run:
-            reporter = DryRunRP(self._options.be_verbose)
+            reporter = DryRunRP(self._options.verbose_level)
         else:
-            reporter = ReportPortal(self._options.be_verbose)
-        self._parser = RobotResultsParser(reporter, self._options.be_verbose)
+            reporter = ReportPortal(self._options.verbose_level)
+        self._parser = RobotResultsParser(reporter, self._options.verbose_level)
 
     def run(self):
         try:
