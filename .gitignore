@@ -5,6 +5,8 @@ log.html
 report.html
 *.swp
 dist
+build
+rpbot.egg-info
 env
 MANIFEST
 .vscode/settings.json
