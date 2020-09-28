@@ -27,16 +27,42 @@ class RobotResultsParser(object):
         if verbose:
             self._logger.setLevel(verbose)
         self.reporter = reporter
+        self.start_time = None
+        self.end_time = None
 
     def xml_to_db(self, xml_file):
         self._logger.info('- Parsing %s' % xml_file)
         test_run = ExecutionResult(xml_file, include_keywords=True)
 
+        self._find_start_end_time(test_run.suite)
+
         self._parse_suite(test_run.suite)
 
+    def _find_start_end_time(self, suite):
+        self.start_time = self._find_start_time(suite)
+        self.end_time = self._find_end_time(suite)
+
+    def _find_start_time(self, suite):
+        if suite.starttime:
+            return suite.starttime
+        if suite.suites:
+            return self._find_start_time(suite.suites[0])
+        if suite.tests:
+            return suite.tests[0].starttime
+        if suite.keywords:
+            return suite.keywords[0].starttime
+
+    def _find_end_time(self, suite):
+        if suite.endtime:
+            return suite.endtime
+        if suite.suites:
+            return self._find_end_time(suite.suites[-1])
+        if suite.tests:
+            return suite.tests[-1].starttime
+        if suite.keywords:
+            return suite.keywords[-1].starttime
+
     def _timestamp(self, t_str):
-        if not t_str:
-            return int(time.time() * 1000)
         return int(datetime.datetime.strptime(t_str, '%Y%m%d %H:%M:%S.%f').timestamp() * 1000)
 
     def _parse_suite(self, suite):
@@ -51,8 +77,8 @@ class RobotResultsParser(object):
             'suites': suite.suites,
             'tests': suite.tests,
             'totaltests': suite.test_count,
-            'starttime': self._timestamp(suite.starttime),
-            'endtime': self._timestamp(suite.endtime),
+            'starttime': self._timestamp(suite.starttime or self.start_time),
+            'endtime': self._timestamp(suite.endtime or self.end_time),
             'status': suite.status,
             'statistics': suite.statistics,
             'message': suite.message,
