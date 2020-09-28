@@ -12,6 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 import datetime
+import time
 import logging
 from robot.api import ExecutionResult
 
@@ -34,6 +35,8 @@ class RobotResultsParser(object):
         self._parse_suite(test_run.suite)
 
     def _timestamp(self, t_str):
+        if not t_str:
+            return int(time.time() * 1000)
         return int(datetime.datetime.strptime(t_str, '%Y%m%d %H:%M:%S.%f').timestamp() * 1000)
 
     def _parse_suite(self, suite):
