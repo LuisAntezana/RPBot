@@ -40,6 +40,7 @@ class ReportPortal:
                 launch.attributes))
             RobotService.start_launch(
                 launch_name=Variables.launch_name,
+                start_time=launch.start_time,
                 attributes=gen_attributes(Variables.launch_attributes),
                 description=launch.doc)
         else:
@@ -59,6 +60,7 @@ class ReportPortal:
             parent_id = self.items[-1][0] if self.items else None
             item_id = RobotService.start_suite(
                 name=name,
+                start_time=suite.start_time,
                 suite=suite,
                 parent_item_id=parent_id)
             self.items.append((item_id, parent_id))
@@ -67,11 +69,11 @@ class ReportPortal:
         suite = Suite(attributes=attributes)
         if suite.robot_id == "s1":
             self._logger.debug(msg="ReportPortal - End Launch: {0}".format(attributes))
-            RobotService.finish_launch(launch=suite)
+            RobotService.finish_launch(launch=suite, end_time=suite.end_time)
             RobotService.terminate_service()
         else:
             self._logger.debug("ReportPortal - End Suite: {0}".format(attributes))
-            RobotService.finish_suite(item_id=self.items.pop()[0], suite=suite)
+            RobotService.finish_suite(item_id=self.items.pop()[0], end_time=suite.end_time, suite=suite)
 
     def start_test(self, name, attributes):
         test = Test(name=name, attributes=attributes)
@@ -80,6 +82,7 @@ class ReportPortal:
         self.items.append((
             RobotService.start_test(
                 test=test,
+                start_time=test.start_time,
                 parent_item_id=parent_item_id,
                 attributes=gen_attributes(Variables.test_attributes) + self._gen_attributes_from_robot_tags(test.tags),
             ),
@@ -89,7 +92,7 @@ class ReportPortal:
         test = Test(name=name, attributes=attributes)
         item_id, _ = self.items.pop()
         self._logger.debug("ReportPortal - End Test: {0}".format(attributes))
-        RobotService.finish_test(item_id=item_id, test=test)
+        RobotService.finish_test(item_id=item_id, end_time=test.end_time, test=test)
 
     def start_keyword(self, name, attributes):
         parent_type = 'SUITE' if not self.items else 'TEST'
@@ -97,15 +100,15 @@ class ReportPortal:
         kwd = Keyword(name=name, parent_type=parent_type, attributes=attributes)
         self._logger.debug("ReportPortal - Start Keyword: {0}".format(attributes))
         self.items.append((
-            RobotService.start_keyword(keyword=kwd, parent_item_id=parent_item_id,
-                                    has_stats=False),
+            RobotService.start_keyword(keyword=kwd, start_time=kwd.start_time, parent_item_id=parent_item_id,
+                                       has_stats=False),
             parent_item_id))
 
     def end_keyword(self, name, attributes):
         kwd = Keyword(name=name, attributes=attributes)
         item_id, _ = self.items.pop()
         self._logger.debug("ReportPortal - End Keyword: {0}".format(attributes))
-        RobotService.finish_keyword(item_id=item_id, keyword=kwd)
+        RobotService.finish_keyword(item_id=item_id, end_time=kwd.end_time, keyword=kwd)
 
     def log_message(self, message):
         # Check if message comes from our custom logger or not
@@ -117,7 +120,7 @@ class ReportPortal:
 
         msg.item_id = self.items[-1][0]
         self._logger.debug("ReportPortal - Log Message: {0}".format(message))
-        RobotService.log(message=msg)
+        RobotService.log(message=msg, log_time=message["timestamp"])
 
     def message(self, message):
         self._logger.debug("ReportPortal - Message: {0}".format(message))

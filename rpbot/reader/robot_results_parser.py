@@ -11,6 +11,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+import datetime
 import logging
 from robot.api import ExecutionResult
 
@@ -32,6 +33,9 @@ class RobotResultsParser(object):
 
         self._parse_suite(test_run.suite)
 
+    def _timestamp(self, t_str):
+        return int(datetime.datetime.strptime(t_str, '%Y%m%d %H:%M:%S.%f').timestamp() * 1000)
+
     def _parse_suite(self, suite):
         self._logger.info('`--> Parsing suite: %s' % suite.name)
 
@@ -44,9 +48,8 @@ class RobotResultsParser(object):
             'suites': suite.suites,
             'tests': suite.tests,
             'totaltests': suite.test_count,
-            'starttime': suite.starttime,
-            'endtime': suite.endtime,
-            'elapsedtime': suite.elapsedtime,
+            'starttime': self._timestamp(suite.starttime),
+            'endtime': self._timestamp(suite.endtime),
             'status': suite.status,
             'statistics': suite.statistics,
             'message': suite.message,
@@ -79,9 +82,8 @@ class RobotResultsParser(object):
             'tags': [tag for tag in test.tags],
             'critical': test.critical,
             'template': '',
-            'starttime': test.starttime,
-            'endtime': test.endtime,
-            'elapsedtime': test.elapsedtime,
+            'starttime': self._timestamp(test.starttime),
+            'endtime': self._timestamp(test.endtime),
             'status': test.status,
             'message': test.message
         }
@@ -105,9 +107,8 @@ class RobotResultsParser(object):
             'args': keyword.args,
             'assign': keyword.assign,
             'tags': keyword.tags,
-            'starttime': keyword.starttime,
-            'endtime': keyword.endtime,
-            'elapsedtime': keyword.elapsedtime,
+            'starttime': self._timestamp(keyword.starttime),
+            'endtime': self._timestamp(keyword.endtime),
             'status': keyword.status
         }
 
@@ -121,4 +122,4 @@ class RobotResultsParser(object):
     def _parse_messages(self, messages):
         for message in messages:
             self.reporter.log_message({'message': message.message, 'level': message.level,
-                                       'timestamp': message.timestamp, 'html': message.html})
+                                       'timestamp': self._timestamp(message.timestamp), 'html': message.html})

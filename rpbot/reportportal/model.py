@@ -15,6 +15,8 @@ class Suite(object):
         self.longname = attributes["longname"]
         self.robot_id = attributes["id"]
         self.metadata = attributes["metadata"]
+        self.start_time = attributes["starttime"]
+        self.end_time = attributes["endtime"]
         self.status = None
         self.message = None
         self.statistics = None
@@ -36,6 +38,8 @@ class Test(object):
         self.doc = attributes["doc"]
         self.longname = attributes["longname"]
         self.robot_id = attributes["id"]
+        self.start_time = attributes["starttime"]
+        self.end_time = attributes["endtime"]
         self.status = None
         self.message = None
         if "status" in attributes.keys():
@@ -56,6 +60,8 @@ class Keyword(object):
         self.assign = attributes["assign"]
         self.keyword_type = attributes["type"]
         self.parent_type = parent_type
+        self.start_time = attributes["starttime"]
+        self.end_time = attributes["endtime"]
         if "status" in attributes.keys():
             self.status = attributes["status"]
 
