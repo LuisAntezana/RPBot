@@ -37,6 +37,27 @@ install using:
 $ python setup.py install
 ```
 
+### Usage
+
+```sh
+$ python -m rpbot.run <options> <rp_group_options> <output.xml>
+```
+
+- options
+  - -d, --dry-run: do everything except store results into ReportPortal.
+  - -v, --verbose: be verbose. WARN, INFO, and DEBUG available.
+
+- rp_group_options
+  - --RP_UUID: ReportPortal UUID. (required)
+  - --RP_ENDPOINT: ReportPortal URL. (required)
+  - --RP_LAUNCH: ReportPortal launch name. (required)
+  - --RP_PROJECT: ReportPortal project name. (required)
+  - --RP_LAUNCH_DOC: ReportPortal launch description.
+  - --RP_LAUNCH_ATTRIBUTES : ReportPortal launch attributes. Space-separated list of tags/attributes. ex) "CUSTOMER:KDI PKG_VER:SVR20C"
+  - --RP_TEST_ATTRIBUTES: ReportPortal test attributes. Space-separated list of tags/attributes.
+
+- output.xml: Output XML file of robot framework
+
 ### License
 
 RpBot is released under the `Apache License, Version 2.0`.
