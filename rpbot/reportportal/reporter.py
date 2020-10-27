@@ -117,6 +117,8 @@ class ReportPortal:
         else:
             msg = LogMessage(message["message"])
             msg.level = message["level"]
+            if "attachment" in message:
+                msg.attachment = message["attachment"]
 
         msg.item_id = self.items[-1][0]
         self._logger.debug("ReportPortal - Log Message: {0}".format(message))

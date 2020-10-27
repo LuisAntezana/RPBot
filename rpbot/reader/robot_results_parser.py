@@ -12,8 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 import datetime
-import time
 import logging
+import mimetypes
+import os
+import re
 from robot.api import ExecutionResult
 
 
@@ -29,9 +31,11 @@ class RobotResultsParser(object):
         self.reporter = reporter
         self.start_time = None
         self.end_time = None
+        self.base_dir = ''
 
-    def xml_to_db(self, xml_file):
+    def xml_to_db(self, xml_file, base_dir=''):
         self._logger.info('- Parsing %s' % xml_file)
+        self.base_dir = base_dir
         test_run = ExecutionResult(xml_file, include_keywords=True)
 
         self._find_start_end_time(test_run.suite)
@@ -127,6 +131,7 @@ class RobotResultsParser(object):
         [self._parse_keyword(keyword) for keyword in keywords]
 
     def _parse_keyword(self, keyword):
+        self._logger.debug('    `--> Parsing keyword: %s' % keyword.name)
 
         attributes = {
             'type': keyword.type,
@@ -150,5 +155,18 @@ class RobotResultsParser(object):
 
     def _parse_messages(self, messages):
         for message in messages:
-            self.reporter.log_message({'message': message.message, 'level': message.level,
-                                       'timestamp': self._timestamp(message.timestamp), 'html': message.html})
+            self._logger.debug(f'      `--> Parsing log: {message}')
+            result = re.search(r'<a href=.+?><img src=\"(.+?)\".*?><\/a>', message.message.strip())
+            if result:
+                image_file = result.group(1)
+                self._logger.debug(f'      `----> Send image file: {image_file}')
+                file_path = os.path.join(self.base_dir, image_file)
+                with open(file_path, 'rb') as f:
+                    attachment = {'name': image_file, 'data': f.read(),
+                                  'mime': mimetypes.guess_type(file_path)[0] or 'image/png'}
+                    self.reporter.log_message({'message': message.message, 'level': message.level,
+                                               'timestamp': self._timestamp(message.timestamp),
+                                               'html': message.html, 'attachment': attachment})
+            else:
+                self.reporter.log_message({'message': message.message, 'level': message.level,
+                                           'timestamp': self._timestamp(message.timestamp), 'html': message.html})
