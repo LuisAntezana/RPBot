@@ -155,8 +155,8 @@ class RobotResultsParser(object):
 
     def _parse_messages(self, messages):
         for message in messages:
-            self._logger.debug(f'      `--> Parsing log: {message}')
-            result = re.search(r'<a href=.+?><img src=\"(.+?)\".*?><\/a>', message.message.strip())
+            self._logger.debug(f'      `--> Parsing log: {message.message}')
+            result = re.search(r'<a href=.+?><img src=\"(.+?)\".*?><\/a>', message.message)
             if result:
                 image_file = result.group(1)
                 self._logger.debug(f'      `----> Send image file: {image_file}')
