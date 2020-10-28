@@ -1,6 +1,6 @@
 ## RPBot
 
-[![Build Status](https://travis-ci.com/doyou89/RPBot.svg?branch=master)](https://travis-ci.com/doyou89/RPBot)
+![Test Python](https://github.com/doyou89/RPBot/workflows/Test%20Python/badge.svg)
 
 RPBot is a Python script to serialize `Robot Framework`  output files into
 a ReportPortal. This way the future `Robot Framework` related tools and
