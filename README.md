@@ -14,7 +14,7 @@ to store test run results in any of the major supported database systems.
 RPBot is tested on
 
 -  `Python` 3.5+
--  `Robot Framework` 3.0+
+-  `Robot Framework` 4.0+
 
 It may (though it is not guaranteed) work with older versions of dependencies.
 
