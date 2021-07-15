@@ -104,7 +104,7 @@ def test_xml_to_db(reporter, parser):
 
     assert reporter.start_keyword.call_count == 1
     assert reporter.start_keyword.call_args[0][0] == 'BuiltIn.Log'
-    assert reporter.start_keyword.call_args[0][1]['type'] == 'kw'
+    assert reporter.start_keyword.call_args[0][1]['type'] == 'KEYWORD'
     assert reporter.start_keyword.call_args[0][1]['kwname'] == 'Log'
     assert reporter.start_keyword.call_args[0][1]['libname'] == 'BuiltIn'
     assert reporter.start_keyword.call_args[0][1]['status'] == 'PASS'
@@ -130,7 +130,7 @@ def test_xml_to_db_with_fail(reporter, parser):
 
     assert reporter.start_keyword.call_count == 2
     assert reporter.start_keyword.call_args_list[0][0][0] == 'BuiltIn.Log'
-    assert reporter.start_keyword.call_args_list[0][0][1]['type'] == 'kw'
+    assert reporter.start_keyword.call_args_list[0][0][1]['type'] == 'KEYWORD'
     assert reporter.start_keyword.call_args_list[0][0][1]['kwname'] == 'Log'
     assert reporter.start_keyword.call_args_list[0][0][1]['libname'] == 'BuiltIn'
     assert reporter.start_keyword.call_args_list[0][0][1]['status'] == 'PASS'

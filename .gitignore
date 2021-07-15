@@ -10,3 +10,4 @@ rpbot.egg-info
 env
 MANIFEST
 .vscode
+*.xml
