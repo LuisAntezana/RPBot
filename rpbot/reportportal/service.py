@@ -5,8 +5,7 @@ from reportportal_client.service import (
     _dict_to_payload,
     ReportPortalService
 )
-
-from .variables import Variables
+from reportportal_client.helpers import get_launch_sys_attrs
 
 
 def async_error_handler(exc_info):
@@ -44,9 +43,7 @@ class RobotService(object):
         :param list cmd_attrs: List for attributes from the pytest.ini file
         """
         attributes = cmd_attrs or []
-        system_info = RobotService.rp.get_system_information(
-            Variables.agent_name)
-        system_info['system'] = True
+        system_info = get_launch_sys_attrs()
         system_attributes = _dict_to_payload(system_info)
         return attributes + system_attributes
 

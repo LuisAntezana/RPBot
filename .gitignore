@@ -9,4 +9,4 @@ build
 rpbot.egg-info
 env
 MANIFEST
-.vscode/settings.json
+.vscode
