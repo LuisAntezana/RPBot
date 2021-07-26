@@ -23,7 +23,8 @@ class RobotService(object):
     status_mapping = {
         "PASS": "PASSED",
         "FAIL": "FAILED",
-        "SKIP": "SKIPPED"
+        "SKIP": "SKIPPED",
+        "NOT RUN": "SKIPPED"
     }
 
     log_level_mapping = {
