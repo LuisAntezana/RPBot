@@ -96,7 +96,7 @@ class ReportPortal:
 
     def start_keyword(self, name, attributes):
         parent_type = 'SUITE' if not self.items else 'TEST'
-        parent_item_id = self.items[-1][0]
+        parent_item_id = self.items[-1][0] if self.items else None
         kwd = Keyword(name=name, parent_type=parent_type, attributes=attributes)
         self._logger.debug("ReportPortal - Start Keyword: {0}".format(attributes))
         self.items.append((

@@ -148,8 +148,10 @@ class RobotResultsParser(object):
 
         self.reporter.start_keyword(keyword.name, attributes)
 
-        self._parse_messages(keyword.messages)
-        self._parse_keywords(keyword.keywords)
+        if hasattr(keyword,'messages'):
+            self._parse_messages(keyword.messages)
+        if hasattr(keyword,'keywords'):
+            self._parse_keywords(keyword.keywords)
 
         self.reporter.end_keyword(keyword.name, attributes)
 
