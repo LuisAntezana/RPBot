@@ -87,10 +87,11 @@ class RobotResultsParser(object):
             'statistics': suite.statistics,
             'message': suite.message,
         }
-
+        # start the suite
         self.reporter.start_suite(suite.name, attributes)
 
-        self._parse_suites(suite)
+        self._parse_suites(suite) # llena la data (suites)
+        # subir los logs
         self._parse_tests(suite.tests)
         self._parse_keywords(suite.keywords)
 
