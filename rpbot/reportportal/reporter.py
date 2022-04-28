@@ -120,7 +120,8 @@ class ReportPortal:
             if "attachment" in message:
                 msg.attachment = message["attachment"]
 
-        msg.item_id = self.items[-1][0]
+        # Set to None since a different value will not upload any log to the launch (including files)
+        msg.item_id = None
         self._logger.debug("ReportPortal - Log Message: {0}".format(message))
         RobotService.log(message=msg, log_time=message["timestamp"])
 

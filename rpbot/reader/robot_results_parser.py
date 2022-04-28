@@ -17,6 +17,8 @@ import mimetypes
 import os
 import re
 from robot.api import ExecutionResult
+from rpbot.reportportal.reporter import ReportPortal
+from rpbot.reportportal.service import RobotService
 
 
 logging.basicConfig()
@@ -24,7 +26,7 @@ logging.basicConfig()
 
 class RobotResultsParser(object):
 
-    def __init__(self, reporter, verbose=False):
+    def __init__(self, reporter: ReportPortal, verbose=False):
         self._logger = logging.getLogger('Parser')
         if verbose:
             self._logger.setLevel(verbose)
@@ -33,14 +35,14 @@ class RobotResultsParser(object):
         self.end_time = None
         self.base_dir = ''
 
-    def xml_to_db(self, xml_file, base_dir=''):
+    def xml_to_db(self, xml_file, log_files, base_dir=''):
         self._logger.info('- Parsing %s' % xml_file)
         self.base_dir = base_dir
         test_run = ExecutionResult(xml_file, include_keywords=True)
 
         self._find_start_end_time(test_run.suite)
 
-        self._parse_suite(test_run.suite)
+        self._parse_suite(test_run.suite, log_files)
 
     def _find_start_end_time(self, suite):
         self.start_time = self._find_start_time(suite)
@@ -69,7 +71,7 @@ class RobotResultsParser(object):
     def _timestamp(self, t_str):
         return int(datetime.datetime.strptime(t_str, '%Y%m%d %H:%M:%S.%f').timestamp() * 1000)
 
-    def _parse_suite(self, suite):
+    def _parse_suite(self, suite, log_files=[]):
         self._logger.info('`--> Parsing suite: %s' % suite.name)
 
         attributes = {
@@ -87,11 +89,9 @@ class RobotResultsParser(object):
             'statistics': suite.statistics,
             'message': suite.message,
         }
-        # start the suite
         self.reporter.start_suite(suite.name, attributes)
-
-        self._parse_suites(suite) # llena la data (suites)
-        # subir los logs
+        self._parse_suites(suite)
+        self._attach_logs(log_files)
         self._parse_tests(suite.tests)
         self._parse_keywords(suite.keywords)
 
@@ -102,6 +102,18 @@ class RobotResultsParser(object):
 
     def _parse_suites(self, suite):
         [self._parse_suite(subsuite) for subsuite in suite.suites]
+
+    def _attach_logs(self, log_files):
+        [self._attach_log(log_file) for log_file in log_files]
+
+    def _attach_log(self, log_file):
+        self._logger.info('  `--> Attaching log file: %s' % log_file)
+        with open(log_file, 'rb') as f:
+            attachment = {'name': os.path.basename(log_file), 'data': f.read(),
+                            'mime': mimetypes.guess_type(log_file)[0] or 'application/octet-stream'}
+            self.reporter.log_message({'message': attachment["name"], 'level': RobotService.log_level_mapping["HTML"],
+                                        'timestamp': self._timestamp(self.start_time),
+                                        'attachment': attachment})
 
     def _parse_tests(self, tests):
         [self._parse_test(test) for test in tests]
