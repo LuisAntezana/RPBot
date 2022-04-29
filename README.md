@@ -46,6 +46,7 @@ $ python -m rpbot.run <options> <rp_group_options> <output.xml>
 - options
   - -d, --dry-run: do everything except store results into ReportPortal.
   - -v, --verbose: be verbose. WARN, INFO, and DEBUG available.
+  - -l, --log-file: attach files to the log view
 
 - rp_group_options
   - --RP_UUID: ReportPortal UUID. (required)
@@ -56,7 +57,7 @@ $ python -m rpbot.run <options> <rp_group_options> <output.xml>
   - --RP_LAUNCH_ATTRIBUTES : ReportPortal launch attributes. Space-separated list of tags/attributes. ex) "CUSTOMER:KDI PKG_VER:SVR20C"
   - --RP_TEST_ATTRIBUTES: ReportPortal test attributes. Space-separated list of tags/attributes.
 
-- output.xml: Output XML file of robot framework
+- output.xml: Output XML file of robot framework (required)
 
 ### License
 
