@@ -46,7 +46,7 @@ $ python -m rpbot.run <options> <rp_group_options> <output.xml>
 - options
   - -d, --dry-run: do everything except store results into ReportPortal.
   - -v, --verbose: be verbose. WARN, INFO, and DEBUG available.
-  - -l, --log-file: attach files to the log view
+  - -f, --upload-file: attach files to the log view
 
 - rp_group_options
   - --RP_UUID: ReportPortal UUID. (required)

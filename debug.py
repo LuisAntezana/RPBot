@@ -1,4 +1,5 @@
+from ast import For
 from rpbot import run
 
-# for debuggin pupouse
+# for debugging purpouse
 run.RpBot().run()

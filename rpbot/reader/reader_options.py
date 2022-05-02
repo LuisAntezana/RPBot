@@ -34,7 +34,7 @@ class ReaderOptions(object):
                                  'dest': 'level',
                                  'help': 'be verbose. WARN, INFO, and DEBUG available.'}),
             
-            ('-l', '--log-file', {'action':'append',
+            ('-f', '--upload-file', {'action':'append',
                                    'dest':"log_files",
                                    'help': 'attach files to the log view (can be multiple).'})
         ]
