@@ -33,6 +33,10 @@ class ReaderOptions(object):
                                  'default': False,
                                  'dest': 'level',
                                  'help': 'be verbose. WARN, INFO, and DEBUG available.'}),
+            
+            ('-f', '--upload-file', {'action':'append',
+                                   'dest':"log_files",
+                                   'help': 'attach files to the log view (can be multiple).'})
         ]
         for option in options:
             self._parser.add_option(option[0], option[1], **option[2])
@@ -61,6 +65,7 @@ class ReaderOptions(object):
     def _get_validated_options(self):
         options, files = self._parser.parse_args()
         self._check_files(files)
+        self._check_files(options.log_files)
         return options, files
 
     def _check_files(self, files):
@@ -121,3 +126,7 @@ class ReaderOptions(object):
     @property
     def rp_log_batch_size(self):
         return self._options.rp_log_batch_size
+    
+    @property
+    def log_files(self):
+        return self._options.log_files

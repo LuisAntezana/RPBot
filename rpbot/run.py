@@ -35,7 +35,7 @@ class RpBot(object):
     def run(self):
         try:
             for xml_file in self._options.file_paths:
-                self._parser.xml_to_db(xml_file, base_dir=os.path.dirname(xml_file))
+                self._parser.xml_to_db(xml_file, self._options.log_files, base_dir=os.path.dirname(xml_file))
         except DataError as message:
             sys.stderr.write('rpbot: error: Invalid XML: %s\n\n' % message)
             exit(1)
